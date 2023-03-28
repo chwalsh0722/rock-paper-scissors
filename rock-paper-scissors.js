@@ -1,152 +1,124 @@
-const buttons = document.getElementsByTagName("button")
+let round = 1;
+let playerWins = 0;
+let computerWins = 0;
+let ties = 0;
 
-// Get ID of clicked button.
-const buttonPressed = e =>
-{
-  console.log(e.target.id);
-}
-
-function getComputerChoice() {
-  let num = Math.floor(Math.random() * 3);
-  let choice = convertChoice(num, "Computer");
-  return choice;
-}
-
-function getPlayerChoice()
-{
-  let buttonClicked = document.addEventListener("click");
-}
-
-// function getPlayerChoice()
-// {
-//   let num = document.getElementById("game-button").value;
-//   let choice = convertChoice(num, "Player");
-//   return choice;
-// }
-
-function convertChoice(num, sender)
-{
-  let choiceNum = parseInt(num);
-  if (choiceNum == 0)
+convertChoiceToNum = choice => {
+  let length = choice.length;
+  let newString = '';
+  for (let i = 0; i < length; i++)
   {
-    console.log(sender + " number: " + choiceNum);
-    console.log(sender + " choice: rock");
-    return "rock";
+    newString += choice.charAt(i);
   }
-  else if (choiceNum == 1)
+  if (newString === "rock")
   {
-    console.log(sender + " number: " + choiceNum);
-    console.log(sender + " choice: paper");
-    return "paper";
+    return 0;
   }
-  else if (choiceNum == 2)
+  else if (newString === "paper")
   {
-    console.log(sender + " number: " + choiceNum);
-    console.log(sender + " choice: scissors");
-    return "scissors";
+    return 1;
+  }
+  else
+  {
+    return 2;
   }
 }
 
-function round(gameStats)
-{
-  let roundCounter = gameStats[3];
+getComputerChoice = () => {
+  let computerChoice = Math.floor(Math.random() * 3);
+  return computerChoice;
+ };
+
+getPlayerChoice = () => {
+  let playerChoice = prompt("Type \'rock', \'paper', or \'scissors'");
+  return convertChoiceToNum(playerChoice);
+ }
+
+playRound = () => {
   let computerChoice = getComputerChoice();
   let playerChoice = getPlayerChoice();
-}
 
-function game()
-{
-  // Declare initial values.
-  let playerVictory = 0;
-  let computerVictory = 0;
-  let ties = 0;
-  let roundCount = 1;
-  let gameStats = [playerVictory, computerVictory, ties, roundCount];
-
-  // Begin round looping.
-  for (roundCount; roundCount <= 5; roundCount++)
+  // 0 = rock, 1 = paper, 2 = scissors
+  if (playerChoice === 0)
   {
-    gameStats = round(gameStats);
-  }
-}
-
-function game(chosenButton)
-{
-  let computerChoice = getComputerChoice();
-  let playerChoice = convertChoice(chosenButton, "Player");
-  let roundCount = 1;
-  let playerVictory = 0;
-  let computerVictory = 0;
-  let ties = 0;
-  
-  for (roundCount; roundCount <= 5; roundCount++)
-  {
-    computerChoice = getComputerChoice();
-    playerChoice = convertChoice(chosenButton, "Player");
-    document.getElementById("round-count").textContent = "ROUND " + roundCount;
-    if (computerChoice == "rock")
+    if (computerChoice === 0)
     {
-      if (playerChoice == "rock")
-      {
-        alert("Computer chose rock. This round is a tie!");
-        ties++;
-      }
-      else if (playerChoice == "paper")
-      {
-        alert("Computer chose rock. You win this round!");
-        playerVictory++;
-      }
-      else
-      {
-        alert("Computer chose rock. You lose this round.");
-        computerVictory++;
-      }
+      alert("Computer chose rock. It's a tie!");
+      ties++;
     }
-    else if (computerChoice == "paper")
+    else if (computerChoice === 1)
     {
-      if (playerChoice == "rock")
-      {
-        alert("Computer chose paper. You lose this round.");
-        computerVictory++;
-      }
-      else if (playerChoice == "paper")
-      {
-        alert("Computer chose paper. This round is a tie!");
-        ties++;
-      }
-      else if (playerChoice == "scissors")
-      {
-        alert("Computer chose paper. You win this round!");
-        playerVictory++;
-      }
+      alert("Computer chose paper. You lose.");
+      computerWins++;
     }
     else
     {
-      if (playerChoice == "rock")
-      {
-        alert("Computer chose scissors. You win this round!");
-        playerVictory++;
-      }
-      else if (playerChoice == "paper")
-      {
-        alert("Computer chose scissors. You lose this round.");
-        computerVictory++;
-      }
-      else if (playerChoice == "scissors")
-      {
-        alert("Computer chose scissors. This round is a tie!");
-        ties++;
-      }
+      alert("Computer chose scissors. You win!");
+      playerWins++;
     }
+  }
+  else if (playerChoice === 1)
+  {
+    if (computerChoice === 0)
+    {
+      alert("Computer chose rock. You win!");
+      playerWins++;
+    }
+    else if (computerChoice === 1)
+    {
+      alert("Computer chose paper. It's a tie!");
+      ties++;
+    }
+    else
+    {
+      alert("Computer chose scissors. You lose.");
+      computerWins++;
+    }
+  }
+  else
+  {
+    if (computerChoice === 0)
+    {
+      alert("Computer chose rock. You lose.");
+      computerWins++;
+    }
+    else if (computerChoice === 1)
+    {
+      alert("Computer chose paper. You win!");
+      playerWins++;
+    }
+    else
+    {
+      alert("Computer chose scissors. It's a tie!")
+      ties++;
+    }
+    round++;
   }
 }
 
-// while (roundCount < 5)
-// {
-//   document.getElementById("")
-// }
+declareWinner = () =>
+{
+  if (playerWins > computerWins)
+  {
+    alert("You won " + playerWins + " rounds, and the computer won " + computerWins + " rounds. You tied " + ties + " rounds. Congratulations!");
+  }
+  else if (playerWins < computerWins)
+  {
+    alert("You won " + playerWins + " rounds, and the computer won " + computerWins + " rounds. You tied " + ties + " rounds. Better luck next time.");
+  }
+  else
+  {
+    alert("You won " + playerWins + " rounds, and the computer won " + computerWins + " rounds. You tied " + ties + " rounds. See if you can win next time!");
+  }
+}
 
-// for (roundCount; roundCount < 5; roundCount++)
-// {
-//   document.getElementById("round-count").textcontent = "ROUND " + roundCount
-// }
+game = () => {
+  alert("Prepare for a game of ROCK, PAPER, SCISSORS!");
+
+  for (round; round <= 5; round++)
+  {
+    playRound();
+  }
+  declareWinner();
+  alert("Thanks for playing!");
+}
