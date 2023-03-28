@@ -38,7 +38,6 @@ playRound = () => {
   let computerChoice = getComputerChoice();
   let playerChoice = getPlayerChoice();
 
-  // 0 = rock, 1 = paper, 2 = scissors
   if (playerChoice === 0)
   {
     if (computerChoice === 0)
@@ -122,3 +121,11 @@ game = () => {
   declareWinner();
   alert("Thanks for playing!");
 }
+
+function buttonClicked(e)
+{
+  console.log(e);
+}
+
+const buttons = document.querySelectorAll('.button');
+buttons.forEach(button => button.addEventListener('click', buttonClicked));
