@@ -1,124 +1,69 @@
 let round = 1;
-let playerWins = 0;
-let computerWins = 0;
+let wins = 0;
+let losses = 0;
 let ties = 0;
 
-convertChoiceToNum = choice => {
-  let length = choice.length;
-  let newString = '';
-  for (let i = 0; i < length; i++)
-  {
-    newString += choice.charAt(i);
-  }
-  if (newString === "rock")
-  {
+function getPlayerChoice(e) {
+  if (e.target.id === 'rock-button') {
     return 0;
   }
-  else if (newString === "paper")
-  {
+  else if (e.target.id === 'paper-button') {
     return 1;
   }
-  else
-  {
+  else {
     return 2;
   }
 }
 
-getComputerChoice = () => {
+function getComputerChoice() {
   let computerChoice = Math.floor(Math.random() * 3);
   return computerChoice;
- };
+}
 
-getPlayerChoice = () => {
-  let playerChoice = prompt("Type \'rock', \'paper', or \'scissors'");
-  return convertChoiceToNum(playerChoice);
- }
+function getRoundWinner(playerChoice, computerChoice) {
+  if ((playerChoice == 0 && computerChoice == 0) || (playerChoice == 1 && computerChoice == 1) || (playerChoice == 2 && computerChoice == 2)) {
+    ties++;
+    tie.textContent = "TIES: " + ties;
+  }
+  else if ((playerChoice == 0 && computerChoice == 1) || (playerChoice == 1 && computerChoice == 2) || (playerChoice == 2 && computerChoice == 0)) {
+    losses++;
+    lose.textContent = "LOSSES: " + losses;
+  }
+  else {
+    wins++;
+    win.textContent = "WINS: " + wins;
+  }
+}
 
-playRound = () => {
+function playRound(e) {
+  if (round >= 5) {
+    return;
+  }
+  let playerChoice = getPlayerChoice(e);
   let computerChoice = getComputerChoice();
-  let playerChoice = getPlayerChoice();
-
-  // 0 = rock, 1 = paper, 2 = scissors
-  if (playerChoice === 0)
-  {
-    if (computerChoice === 0)
-    {
-      alert("Computer chose rock. It's a tie!");
-      ties++;
+  getRoundWinner(playerChoice, computerChoice);
+  if (round == 5) {
+    const winner = document.createElement('winner');
+    winner.setAttribute('style', 'color: gray; font-size: 32px; height: 100px;');
+    if (wins > losses) {
+      winner.textContent = "Congratulations! You won!";
     }
-    else if (computerChoice === 1)
-    {
-      alert("Computer chose paper. You lose.");
-      computerWins++;
+    else if (wins < losses) {
+      winner.textContent = "Sorry, better luck next time!";
     }
-    else
-    {
-      alert("Computer chose scissors. You win!");
-      playerWins++;
+    else {
+      winner.textContent = "It's a draw!";
     }
   }
-  else if (playerChoice === 1)
+  if (round <= 4)
   {
-    if (computerChoice === 0)
-    {
-      alert("Computer chose rock. You win!");
-      playerWins++;
-    }
-    else if (computerChoice === 1)
-    {
-      alert("Computer chose paper. It's a tie!");
-      ties++;
-    }
-    else
-    {
-      alert("Computer chose scissors. You lose.");
-      computerWins++;
-    }
-  }
-  else
-  {
-    if (computerChoice === 0)
-    {
-      alert("Computer chose rock. You lose.");
-      computerWins++;
-    }
-    else if (computerChoice === 1)
-    {
-      alert("Computer chose paper. You win!");
-      playerWins++;
-    }
-    else
-    {
-      alert("Computer chose scissors. It's a tie!")
-      ties++;
-    }
     round++;
   }
+  currentRound.textContent = "ROUND " + round;
 }
 
-declareWinner = () =>
-{
-  if (playerWins > computerWins)
-  {
-    alert("You won " + playerWins + " rounds, and the computer won " + computerWins + " rounds. You tied " + ties + " rounds. Congratulations!");
-  }
-  else if (playerWins < computerWins)
-  {
-    alert("You won " + playerWins + " rounds, and the computer won " + computerWins + " rounds. You tied " + ties + " rounds. Better luck next time.");
-  }
-  else
-  {
-    alert("You won " + playerWins + " rounds, and the computer won " + computerWins + " rounds. You tied " + ties + " rounds. See if you can win next time!");
-  }
-}
-
-game = () => {
-  alert("Prepare for a game of ROCK, PAPER, SCISSORS!");
-
-  for (round; round <= 5; round++)
-  {
-    playRound();
-  }
-  declareWinner();
-  alert("Thanks for playing!");
-}
+const tie = document.getElementById('tie');
+const win = document.getElementById('win');
+const lose = document.getElementById('lose');
+const currentRound = document.getElementById('round-count');
+const buttons = document.querySelectorAll('.button');
